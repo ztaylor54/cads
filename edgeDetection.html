@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Edge Detection Test</title>
+<link rel="stylesheet" type="text/css" href="./css/tooltip.css">
+</head>
+<body>
+<h2>Edge Detection Test</h2>
+<p id="status">OpenCV.js is loading...</p>
+
+<input type="file" id="fileInput" name="file" accept="image/*">
+
+<div>
+    <img id="imageSrc" alt="No Image" style="max-width:500px;">
+	source
+    <canvas id="out1" style="max-width:500px;"></canvas>
+	filtered
+    <canvas id="out2" style="max-width:500px;"></canvas>
+	edges
+</div>
+
+<div>
+	Smoothing Method:
+	<select id="filterSelect" onchange="filterSelected()">
+		<option value="bilateral">Bilateral Filter</option>
+		<option value="median">Median Blur</option>
+	</select>
+
+	<div id="medianOpts" style="visibility:hidden">
+	ksize: <input type="number" min="1" step="2" id="ksize" value="1">
+	</div>
+	<div id="bilateralOpts">
+	d: <input type="text" id="d" value="9">
+	<br>
+	sigmaColor: <input type="number" id="sigmaColor" min="1" value="75">
+	<br>
+	sigmaSpace: <input type="number" id="sigmaSpace" min="1" value="75">
+	</div>
+	<div id="cannyOpts">
+		threshold1: <input type="number" id="threshold1" min="0" value="50" step="10">
+		<br>
+		threshold2: <input type="number" id="threshold2" min="0" value="100" step="10">
+		<br>
+		apertureSize: <input type="number" id="apertureSize" min="3" max="7" value="3" step="2">
+		<br>
+		L2gradient: <input type="checkbox" id="l2gradient">
+		<br>
+	</div>
+	<button type="button" id="runButton">Run</button>
+</div>
+
+<script async src="./js/edgeDetection.js" onload="onOpenCvReady();" onerror="onOpenCvError();" type="text/javascript"></script>
+</body>
+</html>

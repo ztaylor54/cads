@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>OpenCV Hello World</title>
+</head>
+<body>
+<h2>OpenCV Hello World</h2>
+<p id="status">OpenCV.js is loading...</p>
+<div>
+    <table cellpadding="0" cellspacing="0" width="0" border="0">
+    <tbody><tr>
+        <td>
+            <img id="imageSrc" alt="No Image">
+        </td>
+        <td>
+            <canvas id="pHoughTransform"></canvas>
+        </td>
+        <td>
+            <canvas id="cHoughTransform"></canvas>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="caption">imageSrc <input type="file" id="fileInput" name="file" accept="image/*"></div>
+        </td>
+        <td>
+            <div class="caption">Probablilistic Hough Transform - minLineLength: <input type="number" name="phtThreshold" value="0" min="0" max="100" onchange="pHoughTransform(document.getElementById('imageSrc'), parseInt(this.value));"></div>
+        </td>
+        <td>
+            <div class="caption">Circular Hough Transform - threshold: <input type="number" name="chtThreshold" value="254" min="0" max="255" onchange="cHoughTransform(document.getElementById('imageSrc'), parseInt(this.value));"></div>
+        </td>
+    </tr>
+    </tbody></table>
+</div>
+<script async src="./js/helloWorld.js" onload="onOpenCvReady();" onerror="onOpenCvError();" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "cads",
+  "version": "0.1.0",
+  "description": "Computer-Aided Die Study",
+  "main": "./js/main.js",
+  "bin": {
+    "cads": "opencv.js"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ztaylor",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^6.0.1"
+  }
+}
