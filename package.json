@@ -8,11 +8,16 @@
   },
   "scripts": {
     "start": "electron .",
+    "electron-rebuild": "electron-rebuild -w opencv4nodejs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ztaylor",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^6.0.1"
+    "electron": "^6.0.1",
+    "electron-rebuild": "^1.8.5"
+  },
+  "dependencies": {
+    "opencv4nodejs": "^5.1.0"
   }
 }

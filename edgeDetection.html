@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <title>Edge Detection Test</title>
 <link rel="stylesheet" type="text/css" href="./css/tooltip.css">
+<link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
 <h2>Edge Detection Test</h2>
 <p id="status">OpenCV.js is loading...</p>
 
-<input type="file" id="fileInput" name="file" accept="image/*">
+<input type="file" id="fileInput" name="file" accept="image/*" onchange="encodeImageFileAsURL(this)">
 
 <div>
     <img id="imageSrc" alt="No Image" style="max-width:500px;">

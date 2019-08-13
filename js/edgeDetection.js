@@ -1,16 +1,25 @@
-let cv = require('./bin/opencv.js')
+//let cv = require('./bin/opencv.js')
+const cv = require('opencv4nodejs');
+const ih = require('./js/modules/image-helpers.js');
+
+let base64image
 
 let runButton = document.getElementById('runButton');
 let imgElement = document.getElementById('imageSrc');
-let inputElement = document.getElementById('fileInput');
-inputElement.addEventListener('change', (e) => {
-  imgElement.src = URL.createObjectURL(e.target.files[0]);
-}, false);
+
+function encodeImageFileAsURL(element) {
+  var file = element.files[0];
+  imgElement.src = URL.createObjectURL(file);
+  var reader = new FileReader();
+  reader.onloadend = function() {
+    base64image = reader.result;
+  }
+  reader.readAsDataURL(file);
+}
 
 // When the button is pressed
 runButton.addEventListener('click', function(e) {
-
-  let src = cv.imread(imgElement);
+  let src = ih.decodeImageFromBase64(base64image);
   let dst = new cv.Mat();
 
   // Get options
@@ -28,30 +37,28 @@ runButton.addEventListener('click', function(e) {
   console.log(opts);
 
   // Convert to grayscale
-  cv.cvtColor(src, src, cv.COLOR_RGBA2RGB, 0);
+  src = src.bgrToGray();
 
   // Apply the selected filter
   switch (opts.filterType) {
     case 'bilateral':
-      cv.bilateralFilter(src, dst, opts.d, opts.sigmaColor, opts.sigmaSpace, cv.BORDER_DEFAULT);
+      dst = src.bilateralFilter(opts.d, opts.sigmaColor, opts.sigmaSpace, cv.BORDER_DEFAULT);
     break;
     case 'median':
-      cv.medianBlur(src, dst, opts.ksize);
+      dst = src.medianBlur(opts.ksize);
     break;
   }
 
   // Output
-  cv.imshow('out1', dst);
+  ih.renderImage(dst, document.getElementById('out1'));
 
   let out = new cv.Mat();
 
   // Apply the edge detection
-  cv.Canny(dst, out, opts.threshold1, opts.threshold2, opts.apertureSize, opts.l2gradient);
+  out = dst.canny(opts.threshold1, opts.threshold2, opts.apertureSize, opts.l2gradient);
 
   // Output
-  cv.imshow('out2', out);
-
-  src.delete(); dst.delete();
+  ih.renderImage(out, document.getElementById('out2'));
 
 });
 

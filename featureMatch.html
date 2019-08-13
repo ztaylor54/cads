@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Feature Matching</title>
+<link rel="stylesheet" type="text/css" href="./css/tooltip.css">
+<link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+<h2>Feature Matching</h2>
+<p id="status">OpenCV.js is loading...</p>
+
+image A: <input type="file" id="fileInput1" name="file" accept="image/*" onchange="loadToCanvas(this, 'srcImgA')">
+image B: <input type="file" id="fileInput2" name="file" accept="image/*" onchange="loadToCanvas(this, 'srcImgB')">
+
+<!-- Source images -->
+<hr>
+<div>
+  <canvas id="srcImgA" width="300" height="300"></canvas>
+  <canvas id="srcImgB" width="300" height="300"></canvas>
+</div>
+
+<!-- Features -->
+<hr>
+<p>Feature Matches</p>
+<div>
+  <p>ORB matches:</p>
+  <canvas id="orbMatches" width="300" height="300"></canvas>
+  <p>ORB with BFMatcher - crossCheck true:</p>
+  <canvas id="orbMatchesCC" width="300" height="300"></canvas>
+</div>
+
+<!-- Feature Match -->
+<hr>
+<button type="button" onclick="detectFeatures()">Detect Features</button>
+
+<script async src="./js/featureMatch.js" onload="onOpenCvReady();" onerror="onOpenCvError();" type="text/javascript"></script>
+</body>
+</html>
