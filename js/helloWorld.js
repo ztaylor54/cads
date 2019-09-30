@@ -1,4 +1,4 @@
-let cv = require('./bin/opencv.js');
+let cv = require('../bin/opencv.js');
 
 let imgElement = document.getElementById('imageSrc');
 let inputElement = document.getElementById('fileInput');

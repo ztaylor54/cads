@@ -4,6 +4,14 @@ const { app, BrowserWindow } = require('electron')
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
+// Shared global objects
+global.shared = {
+  featureRadius: 0,
+  featureRadiusImage: undefined,
+  blurRadius: 0,
+  blurRadiusImage: undefined
+ };
+
 function createWindow () {
 
   // Create the browser window.
@@ -16,10 +24,16 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  win.loadFile('index.html')
+  win.loadFile('app/index.html')
 
   // Open the DevTools.
   win.webContents.openDevTools()
+
+  // Disable the menu
+  win.setMenu(null);
+
+  // Maximize the window
+  win.maximize()
 
   // Emitted when the window is closed.
   win.on('closed', () => {

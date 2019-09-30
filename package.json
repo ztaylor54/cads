@@ -14,8 +14,13 @@
   "author": "ztaylor",
   "license": "MIT",
   "devDependencies": {
+    "d3": "^5.11.0",
+    "d3-drag": "^1.2.4",
+    "d3-zoom": "^1.8.3",
     "electron": "^6.0.1",
-    "electron-rebuild": "^1.8.5"
+    "electron-rebuild": "^1.8.5",
+    "ml-hclust": "^3.0.0",
+    "node-kmeans": "^1.1.9"
   },
   "dependencies": {
     "opencv4nodejs": "^5.1.0"

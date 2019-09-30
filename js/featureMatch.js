@@ -1,5 +1,5 @@
 const cv = require('opencv4nodejs');
-const ih = require('./js/modules/image-helpers.js');
+const ih = require('../js/modules/image-helpers.js');
 
 function loadToCanvas(element, canvasId) {
   var canvas = document.getElementById(canvasId);
@@ -13,8 +13,16 @@ function loadToCanvas(element, canvasId) {
 }
 
 function detectFeatures() {
-  const img1 = ih.decodeImageFromBase64(document.getElementById('srcImgA').toDataURL());
-  const img2 = ih.decodeImageFromBase64(document.getElementById('srcImgB').toDataURL());
+  var img1 = ih.decodeImageFromBase64(document.getElementById('srcImgA').toDataURL());
+  var img2 = ih.decodeImageFromBase64(document.getElementById('srcImgB').toDataURL());
+
+  // Convert to grayscale
+  img1 = img1.bgrToGray();
+  img2 = img2.bgrToGray();
+
+  // Median blur
+  img1 = img1.medianBlur(5);
+  img2 = img2.medianBlur(5);
 
   // Check if opencv compiled with extra modules and nonfree
   /*
@@ -69,6 +77,20 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   const bestMatches = matches.sort(
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
+
+  for(var i = 0; i < 10; i++)  {
+    // Audit the 10 best matches in console
+    console.log(bestMatches[i].distance);
+  }
+
+  // Return the average distance between matched descriptors
+  let dist = Math.abs(
+    bestMatches.reduceRight(
+      (acc, curr) => acc + Math.abs(curr.distance),
+      0
+    ) / bestMatches.length
+  );
+  console.log("avg distance: " + dist);
 
   return cv.drawMatches(
     img1,

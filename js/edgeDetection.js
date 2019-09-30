@@ -1,6 +1,6 @@
 //let cv = require('./bin/opencv.js')
 const cv = require('opencv4nodejs');
-const ih = require('./js/modules/image-helpers.js');
+const ih = require('../js/modules/image-helpers.js');
 
 let base64image
 

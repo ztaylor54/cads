@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Define feature radius</title>
+<link rel="stylesheet" href="../../css/modal.css" />
+<link rel="stylesheet" href="../../css/style.css" />
+</head>
+<body>
+  <h3>Define feature radius</h3>
+  <hr>
+  <div class="row">
+    <!-- Left-hand-side -->
+    <div class="column">
+      <div>
+        <canvas id="imgCanvas" width="300" height="300" style="max-width:500px;"></canvas>
+
+        <!-- Radius slider -->
+        <div class="slidecontainer">
+          <input type="range" min="1" max="500" value="50" class="slider" id="radiusSlider" oninput="radiusChanged(this.value)">
+          <p>Radius: <span id="currentValue">50</span></p>
+        </div>
+      </div>
+      <p><b>Close this window when you are satisfied with the selected radius.</b></p>
+    </div>
+
+    <!-- Right-hand-side -->
+    <div class="column">
+      <p>To calibrate feature extraction, drag the slider until the circle encompases the bulk of the coin's type while omitting the edge. Leave some padding to account for variations on extreme strikes. Press When finished,close this window to continue with image pre-processing.</p>
+
+      <p>Here is an example of good circle placement:</p>
+      <img src="../../resources/imgs/circlePlacementExample.png" alt="Circle placement example">
+    </div>
+  </div>
+<script async src="../../js/modal/defineFeatureRadius.js" type="text/javascript"></script>
+</body>
+</html>

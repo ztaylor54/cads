@@ -21,5 +21,16 @@ module.exports = {
     );
     var ctx = canvas.getContext('2d');
     ctx.putImageData(imgData, 0, 0);
+  },
+
+  loadToCanvas: function(element, canvasId) {
+    var canvas = document.getElementById(canvasId);
+    var ctx = canvas.getContext('2d');
+    var img = new Image;
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
+                     0, 0, canvas.width, canvas.height); // destination rectangle
+    }
+    img.src = URL.createObjectURL(element.files[0]);
   }
 };

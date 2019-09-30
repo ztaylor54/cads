@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>End-To-End CADS Test</title>
+<link rel="stylesheet" type="text/css" href="../css/tooltip.css">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<h2>End-To-End CADS Test</h2>
+<p id="status">OpenCV.js is loading...</p>
+
+source directory: <input type="file" webkitdirectory mozdirectory id="dirInput" accept="image/*" onchange="loadDir(this)" />
+
+<div id="prog" style="display:none">
+  Preprocessing images <progress id="progBar" value="0" max="100"></progress> <div id="progInfo"></div>
+</div>
+
+<!-- Create a div where the graph will take place -->
+<div id="dendrogram"></div>
+
+<!-- Feature Match -->
+<hr>
+<button type="button" onclick="cluster()">Cluster</button>
+
+<script async src="../js/endToEnd.js" onload="onOpenCvReady();" onerror="onOpenCvError();" type="text/javascript"></script>
+</body>
+</html>
