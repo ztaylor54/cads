@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>End-To-End CADS Test</title>
 <link rel="stylesheet" type="text/css" href="../css/tooltip.css">
-<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" type="text/css" href="../css/style.css" />
 </head>
 <body>
 <h2>End-To-End CADS Test</h2>
@@ -21,7 +21,34 @@ source directory: <input type="file" webkitdirectory mozdirectory id="dirInput" 
 
 <!-- Feature Match -->
 <hr>
-<button type="button" onclick="cluster()">Cluster</button>
+<!-- <button type="button" onclick="cluster()">Cluster</button> -->
+Die partitioning threshold: <input type="number" id="partitionThreshold" min="1">
+<button type="button" id="partitionButton">Partition</button>
+
+<!-- Node inspection modal -->
+<div id="nodeInspectionModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Node inspector</p>
+
+    <!-- Image viewer -->
+    <canvas id="modalCanvas" width="300" height="300" style="max-height:300px;"></canvas>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="0" value="0" class="slider" id="modalImageSlider">
+      <p>img: <span id="imageId"></span></p>
+    </div>
+    <input type="checkbox" id="autoscrollCheckbox"> Autoscroll images<br>
+    <div class="slidecontainer">
+      <input type="range" min="10" max="500" step="10" value="300" class="slider" id="autoscrollSpeed">
+      <p>Autoscroll speed</p>
+    </div>
+
+
+  </div>
+
+</div>
 
 <script async src="../js/endToEnd.js" onload="onOpenCvReady();" onerror="onOpenCvError();" type="text/javascript"></script>
 </body>

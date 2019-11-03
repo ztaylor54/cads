@@ -6,7 +6,7 @@ const { agnes } = require('ml-hclust');
 const dendrogram = require('../js/modules/dendrogram.js');
 const remote = require('electron').remote;
 
-// root dir for input images
+// Root dir for input images
 var rootDir;
 var descriptors = new Array();
 
@@ -14,6 +14,10 @@ let globalTree;
 
 /* Entry point to clustering process, called when directory is selected */
 function loadDir(dirInput) {
+  // Make sure descriptors and tree are empty
+  globalTree = undefined;
+  descriptors = new Array();
+
   const root = dirInput.files[0].path;
   rootDir = root;
 
@@ -50,6 +54,9 @@ function extractFeatures() {
     // Stop timing
     var millis = Date.now() - start;
     console.log("Seconds elapsed = " + Math.floor(millis/1000));
+
+    // Display the graph
+    cluster();
   });
 }
 
@@ -152,6 +159,8 @@ function preProcess(file) {
 
 /* Perform hierarchical clustering and draw resulting dendrogram */
 function cluster() {
+  // Delete any old visualizations
+  cleanup();
 
   // Time this process
   var start = Date.now();
@@ -166,6 +175,7 @@ function cluster() {
   console.log(tree);
 
   globalTree = tree;
+  annotate(globalTree);
 
   // Draw the dendrogram
   dendrogram.drawDendrogram("#dendrogram", tree, descriptors.map(x => x.filename), rootDir);
@@ -201,6 +211,19 @@ function distance(objA, objB) {
   //console.log();
 
   return dist;
+}
+
+/* Annotate a cluster */
+function annotate(cluster) {
+  // Base case
+  if(cluster.isLeaf) {
+    return [cluster.index];
+  }
+  else {
+    // Annotate this node and pass along
+    cluster.members = cluster.children.map(x => annotate(x)).reduce((curr, acc) => acc.concat(curr), []);
+    return cluster.members;
+  }
 }
 
 /* Clear a directory */
@@ -252,4 +275,23 @@ function updateProgBar(value, max) {
 
   var progInfo = document.getElementById("progInfo");
   progInfo.innerHTML = value + "/" + max + " (" + (value / max) + "%)";
+}
+
+/* Clean up dendrogram div */
+function cleanup() {
+  const d = document.getElementById('dendrogram');
+  while (d.firstChild) {
+    d.removeChild(d.firstChild);
+  }
+}
+
+/* When the selected modal image changes */
+function radiusChanged(newVal) {
+  document.getElementById("currentValue").innerHTML = newVal;
+
+  // Redraw image with new circle
+  drawCircleAndDisplay(imgPath, newVal);
+
+  // Set this value globally
+  remote.getGlobal('shared').featureRadius = newVal;
 }
