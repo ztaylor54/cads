@@ -1,0 +1,93 @@
+@import "@material/top-app-bar/mdc-top-app-bar";
+@import "@material/icon-button/mdc-icon-button";
+@import "@material/drawer/mdc-drawer";
+@import "@material/list/mdc-list";
+@import "@material/tab-bar/mdc-tab-bar";
+@import "@material/tab-scroller/mdc-tab-scroller";
+@import "@material/tab-indicator/mdc-tab-indicator";
+@import "@material/tab/mdc-tab";
+@import "@material/elevation/mdc-elevation";
+
+// Theme colors
+$background: #eae7dc;
+$accent1: #d8c3a5;
+$accent2: #8e8d8a;
+$contrast1: #e98074;
+$contrast2: #e85a4f;
+
+// Variables
+$props-width: 300px;
+$props-height: 600px;
+$minimap-width: 200px;
+$minimap-height: 600px;
+
+body {
+  background-color: $background;
+  display: flex;
+}
+
+.mdc-drawer-app-content {
+  flex: auto;
+  overflow: auto;
+  position: relative;
+}
+
+.mdc-drawer {
+  @include mdc-drawer-fill-color-accessible($background);
+}
+
+.main-content {
+  overflow: auto;
+  height: 100%;
+}
+
+.app-bar {
+  position: absolute;
+}
+
+.mdc-top-app-bar {
+  z-index: 7;
+
+  // Recolor the top app bar
+  @include mdc-top-app-bar-fill-color($background);
+  @include mdc-top-app-bar-ink-color($contrast2);
+  @include mdc-top-app-bar-icon-ink-color($contrast2);
+}
+
+.mdc-tab {
+  @include mdc-tab-ink-color($contrast2);
+  @include mdc-tab-active-text-label-color($accent2);
+  @include mdc-tab-height(50px);
+  @include mdc-tab-horizontal-padding(17px);
+
+}
+
+.mdc-tab-bar {
+  @include mdc-tab-bar-width($props-width);
+}
+
+.mdc-tab-indicator {
+  @include mdc-tab-indicator-underline-color($contrast2);
+}
+
+.minimap {
+  width: $minimap-width;
+  height: $minimap-height;
+  float: left;
+}
+
+.dendrogram {
+  overflow: hidden;
+  height: $props-height;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.properties {
+  float: right;
+  width: $props-width;
+  height: $props-height;
+}

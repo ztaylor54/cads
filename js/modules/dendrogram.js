@@ -16,8 +16,8 @@ module.exports = {
 
   // Main svg viewport
   const svg = d3.select(divId)
-      .append("svg")
-      .attr("viewBox", [0, 0, vpWidth, vpHeight]);
+      .append("svg");
+      //.attr("viewBox", [0, 0, vpWidth, vpHeight]);
 
   // Main graph container
   const g = svg.append("g")

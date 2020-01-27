@@ -90,7 +90,7 @@ function launchModal(url, callback) {
     width: 1200,
     height: 800,
     parent: remote.getCurrentWindow(),
-    modal: true,
+    // modal: true,
     webPreferences: {
             nodeIntegration: true
         },
@@ -240,7 +240,7 @@ function clearDir(dirname) {
 }
 
 function onOpenCvReady() {
-  document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+  //document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
 }
 function onOpenCvError() {
   let element = document.getElementById('status');

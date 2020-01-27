@@ -5,49 +5,105 @@
 <title>End-To-End CADS Test</title>
 <link rel="stylesheet" type="text/css" href="../css/tooltip.css">
 <link rel="stylesheet" type="text/css" href="../css/style.css" />
+<link rel="stylesheet" type="text/css" href="../node_modules/material-components-web/dist/material-components-web.min.css" />
+<link rel="stylesheet" type="text/css" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
-<h2>End-To-End CADS Test</h2>
-<p id="status">OpenCV.js is loading...</p>
-
-source directory: <input type="file" webkitdirectory mozdirectory id="dirInput" accept="image/*" onchange="loadDir(this)" />
-
-<div id="prog" style="display:none">
-  Preprocessing images <progress id="progBar" value="0" max="100"></progress> <div id="progInfo"></div>
-</div>
-
-<!-- Create a div where the graph will take place -->
-<div id="dendrogram"></div>
-
-<!-- Feature Match -->
-<hr>
-<!-- <button type="button" onclick="cluster()">Cluster</button> -->
-Die partitioning threshold: <input type="number" id="partitionThreshold" min="1">
-<button type="button" id="partitionButton">Partition</button>
-
-<!-- Node inspection modal -->
-<div id="nodeInspectionModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Node inspector</p>
-
-    <!-- Image viewer -->
-    <canvas id="modalCanvas" width="300" height="300" style="max-height:300px;"></canvas>
-    <div class="slidecontainer">
-      <input type="range" min="0" max="0" value="0" class="slider" id="modalImageSlider">
-      <p>img: <span id="imageId"></span></p>
-    </div>
-    <input type="checkbox" id="autoscrollCheckbox"> Autoscroll images<br>
-    <div class="slidecontainer">
-      <input type="range" min="10" max="500" step="10" value="300" class="slider" id="autoscrollSpeed">
-      <p>Autoscroll speed</p>
-    </div>
-
-
+  <!-- Top App Bar -->
+<header class="mdc-top-app-bar">
+  <div class="mdc-top-app-bar__row">
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+      <button class="mdc-top-app-bar__navigation-icon mdc-icon-button material-icons" href="#">menu</button>
+       <span class="mdc-top-app-bar__title">Computer-Aided Die Study (CADS)</span>
+    </section>
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+      <button class="fas fa-file-import mdc-top-app-bar__action-item">file_load</button>
+      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Print this page">print</button>
+      <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Bookmark this page">bookmark</button>
+    </section>
   </div>
+</header>
 
+<div class="app-drawer-layout mdc-top-app-bar--fixed-adjust">
+  <!-- Drawer -->
+  <aside class="mdc-drawer mdc-drawer--dismissible demo-drawer">
+    <nav class="mdc-drawer__drawer">
+      <nav class="mdc-drawer__content">
+        <div id="icon-with-text-demo" class="mdc-list">
+          <a class="mdc-list-item mdc-list-item--selected demo-drawer-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>Inbox
+          </a>
+          <a class="mdc-list-item demo-drawer-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">star</i>Star
+          </a>
+          <a class="mdc-list-item demo-drawer-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>Sent Mail
+          </a>
+          <a class="mdc-list-item demo-drawer-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>Drafts
+          </a>
+        </div>
+
+        <hr class="mdc-list-divider">
+
+        <div class="mdc-list">
+          <a class="mdc-list-item demo-drawer-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">email</i>All Mail
+          </a>
+          <a class="mdc-list-item demo-drawer-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">delete</i>Trash
+          </a>
+          <a class="mdc-list-item demo-drawer-list-item" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">report</i>Spam
+          </a>
+        </div>
+      </nav>
+    </nav>
+  </aside>
+
+  <main class="mdc-drawer-app-content main-content">
+    <div class="mdc-card mdc-elevation--z4">
+      <!-- <p id="status">OpenCV.js is loading...</p> -->
+
+      source directory: <input type="file" webkitdirectory mozdirectory id="dirInput" accept="image/*" onchange="loadDir(this)" />
+
+      load from file: <input type="file" webkitdirectory mozdirectory id="fileInput" accept=".json" onchange="loadFromFile(this)" />
+
+      <div id="prog" style="display:none">
+        Preprocessing images <progress id="progBar" value="0" max="100"></progress> <div id="progInfo"></div>
+      </div>
+    </div>
+
+    <!-- Create a div where the graph will take place -->
+    <div id="dendrogram"></div>
+
+    <!-- Feature Match -->
+    Die partitioning threshold: <input type="number" id="partitionThreshold" min="1">
+    <button type="button" id="partitionButton">Partition</button>
+
+    <!-- Node inspection modal -->
+    <div id="nodeInspectionModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Node inspector</p>
+
+        <!-- Image viewer -->
+        <canvas id="modalCanvas" width="300" height="300" style="max-height:300px;"></canvas>
+        <div class="slidecontainer">
+          <input type="range" min="0" max="0" value="0" class="slider" id="modalImageSlider">
+          <p>img: <span id="imageId"></span></p>
+        </div>
+        <input type="checkbox" id="autoscrollCheckbox"> Autoscroll images<br>
+        <div class="slidecontainer">
+          <input type="range" min="10" max="500" step="10" value="300" class="slider" id="autoscrollSpeed">
+          <p>Autoscroll speed</p>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
 <script async src="../js/endToEnd.js" onload="onOpenCvReady();" onerror="onOpenCvError();" type="text/javascript"></script>

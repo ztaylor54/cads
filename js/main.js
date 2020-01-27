@@ -24,7 +24,8 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  win.loadFile('app/endToEnd.html')
+  //win.loadFile('app/endToEnd.html')
+  win.loadFile('app/main.html')
 
   // Open the DevTools.
   win.webContents.openDevTools()
