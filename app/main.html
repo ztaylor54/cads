@@ -2,105 +2,154 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>CADS v1.0</title>
 <link rel="stylesheet" href="../dist/bundle.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
   <!-- Top App Bar -->
+  <div class="main-grid-container main-content">
+    <header class="mdc-top-app-bar mdc-top-app-bar--short mdc-elevation--z2">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <button class="mdc-top-app-bar__navigation-icon mdc-icon-button material-icons" href="#">menu</button>
+           <span class="mdc-top-app-bar__title">Computer-Aided Die Study</span>
+        </section>
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+          <!-- <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Settings">settings_applications</button> -->
+          <!-- <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Export to file">import_export</button> -->
+          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="More">more_vert</button>
+        </section>
+      </div>
+    </header>
 
-  <header class="mdc-top-app-bar mdc-top-app-bar--short mdc-elevation--z2">
-    <div class="mdc-top-app-bar__row">
-      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-        <button class="mdc-top-app-bar__navigation-icon mdc-icon-button material-icons" href="#">menu</button>
-         <span class="mdc-top-app-bar__title">Computer-Aided Die Study</span>
-      </section>
-      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-          <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Settings">settings_applications</button>
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Export to file">import_export</button>
-        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="More">more_vert</button>
-      </section>
-    </div>
-  </header>
-
-  <aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">
+    <aside class="mdc-drawer mdc-drawer--modal mdc-top-app-bar--short-fixed-adjust">
       <div class="mdc-drawer__content">
-        <div class="mdc-list">
-          <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">inbox</i>
-            <span class="mdc-list-item__text">Inbox</span>
+        <nav class="mdc-list">
+          <a class="mdc-list-item mdc-list-item--activated nav-action-new" href="#" aria-current="page">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">add</i>
+            <span class="mdc-list-item__text">New Study</span>
           </a>
-          <a class="mdc-list-item" href="#">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">send</i>
-            <span class="mdc-list-item__text">Outgoing</span>
+          <hr>
+          <a class="mdc-list-item nav-action-save" href="#" aria-current="page">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">save</i>
+            <span class="mdc-list-item__text">Save</span>
           </a>
-          <a class="mdc-list-item" href="#">
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">drafts</i>
-            <span class="mdc-list-item__text">Drafts</span>
+          <a class="mdc-list-item nav-action-open" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>
+            <span class="mdc-list-item__text">Open</span>
           </a>
-        </div>
+          <a class="mdc-list-item nav-action-export" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">import_export</i>
+            <span class="mdc-list-item__text">Export</span>
+          </a>
+          <hr>
+          <a class="mdc-list-item nav-action-tree-view" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">account_tree</i>
+            <span class="mdc-list-item__text">Tree View</span>
+          </a>
+          <a class="mdc-list-item nav-action-die-view" href="#">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">dashboard</i>
+            <span class="mdc-list-item__text">Die View</span>
+          </a>
+        </nav>
       </div>
     </aside>
 
-<!-- Main Content -->
-    <div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
-      <main class="main-content" id="main-content">
-        <!-- Mini treemap on left side -->
-        <div class="minimap mdc-elevation--z2">
-          <p>Minimap TODO</p>
-        </div>
+    <div class="mdc-drawer-scrim"></div>
 
-        <!-- Properties panel -->
-        <div class="properties mdc-elevation--z2">
-          <!-- Tab bar -->
-          <div class="mdc-tab-bar" role="tablist">
-            <div class="mdc-tab-scroller">
-              <div class="mdc-tab-scroller__scroll-area">
-                <div class="mdc-tab-scroller__scroll-content">
-                  <button class="mdc-tab mdc-tab--min-width mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
-                    <span class="mdc-tab__content">
-                      <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
-                      <span class="mdc-tab__text-label">Properties</span>
-                    </span>
-                    <span class="mdc-tab-indicator mdc-tab-indicator--active">
-                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                    </span>
-                    <span class="mdc-tab__ripple"></span>
-                  </button>
-                  <button class="mdc-tab mdc-tab--min-width" role="tab" aria-selected="true" tabindex="1">
-                    <span class="mdc-tab__content">
-                      <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
-                      <span class="mdc-tab__text-label">Cards</span>
-                    </span>
-                    <span class="mdc-tab-indicator">
-                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                    </span>
-                    <span class="mdc-tab__ripple"></span>
-                  </button>
-                  <button class="mdc-tab mdc-tab--min-width" role="tab" aria-selected="true" tabindex="2">
-                    <span class="mdc-tab__content">
-                      <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
-                      <span class="mdc-tab__text-label">Dies</span>
-                    </span>
-                    <span class="mdc-tab-indicator">
-                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                    </span>
-                    <span class="mdc-tab__ripple"></span>
-                  </button>
-                </div>
-              </div>
+    <!-- Mini treemap on left side -->
+    <div class="minimap mdc-elevation--z2">
+      <div class="minimap-header">
+        <p>Minimap View</p>
+      </div>
+      <hr>
+    </div>
+
+    <!-- Properties panel -->
+    <div class="properties mdc-elevation--z2">
+      <!-- Tab bar -->
+      <div class="mdc-tab-bar" role="tablist">
+        <div class="mdc-tab-scroller">
+          <div class="mdc-tab-scroller__scroll-area">
+            <div class="mdc-tab-scroller__scroll-content">
+              <button class="mdc-tab mdc-tab--min-width mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                <span class="mdc-tab__content">
+                  <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
+                  <span class="mdc-tab__text-label">Node</span>
+                </span>
+                <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                  <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                </span>
+                <span class="mdc-tab__ripple"></span>
+              </button>
+              <button class="mdc-tab mdc-tab--min-width" role="tab" aria-selected="true" tabindex="1">
+                <span class="mdc-tab__content">
+                  <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
+                  <span class="mdc-tab__text-label">Cards</span>
+                </span>
+                <span class="mdc-tab-indicator">
+                  <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                </span>
+                <span class="mdc-tab__ripple"></span>
+              </button>
+              <button class="mdc-tab mdc-tab--min-width" role="tab" aria-selected="true" tabindex="2">
+                <span class="mdc-tab__content">
+                  <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
+                  <span class="mdc-tab__text-label">Dies</span>
+                </span>
+                <span class="mdc-tab-indicator">
+                  <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                </span>
+                <span class="mdc-tab__ripple"></span>
+              </button>
             </div>
           </div>
-
         </div>
-
-        <!-- Dendrogram view -->
-        <div class="dendrogram" id="dendrogram">
-
+      </div>
+      <!-- Props cards go here -->
+      <div class="mdc-card props-card">
+        <div class="props-card-img mdc-card__media mdc-card__media--square">
         </div>
-      </main>
-      source directory: <input type="file" webkitdirectory mozdirectory id="dirInput" accept="image/*" onchange="loadDir(this)" />
+        <div class="props-card-content props-grid-container">
+          <span class="props-filename-label">File</span>
+          <span class="props-card-filename"></span><br>
+          <span class="props-tags-label">Tags</span>
+          <div class="props-tags-wrapper">
+            <input class="props-tags-input">
+          </div>
+          <!-- <span class="props-actions-label">Actions</span> -->
+          <div class="mdc-card__action-buttons props-buttons">
+            <button class="mdc-button mdc-card__action mdc-card__action--button props-inspect-features">  <span class="mdc-button__ripple"></span> Inspect Features</button>
+            <button class="mdc-button mdc-card__action mdc-card__action--button props-add-note">  <span class="mdc-button__ripple"></span> Add Note</button>
+            <button class="mdc-button mdc-card__action mdc-card__action--button props-make-die">  <span class="mdc-button__ripple"></span> Make Die</button>
+            <!-- <button class="mdc-icon-button material-icons" title="Inspect Features">search</button> -->
+            <!-- <button class="mdc-icon-button material-icons" title="Add Note">note_add</button> -->
+            <!-- <button class="mdc-icon-button material-icons" title="Make Die">add</button> -->
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Dendrogram view -->
+    <div class="dendrogram" id="dendrogram">
+
+    </div>
+  </div>
+
+
+  <!-- Notification Snackbars -->
+  <div class="mdc-snackbar mdc-snackbar--leading mdc-snackbar__dismiss">
+    <div class="mdc-snackbar__surface">
+      <div class="mdc-snackbar__label"
+           role="status"
+           aria-live="polite">
+        Notification text here
+      </div>
+      <!-- <div class="mdc-snackbar__actions">
+        <button type="button" class="mdc-button mdc-snackbar__action">Retry</button>
+      </div> -->
+    </div>
+  </div>
   <script src="../js/clustering.js" async></script>
   <script src="../dist/bundle.js" async></script>
 </body>

@@ -1,11 +1,14 @@
 // Module to draw a dendrogram using d3
 const d3 = require('d3');
-const preview = require('./preview.js')
+//const preview = require('./preview.js')
 const ih = require('../../js/modules/image-helpers.js');
 const cv = require('opencv4nodejs');
+const props = require('../../js/modules/properties.js');
 
 module.exports = {
-  drawDendrogram: function(divId, data, labels, rootDir) {
+  drawDendrogram: function(divId, data, descriptors, rootDir) {
+
+    labels = descriptors.map(x => x.filename);
 
 //DEBUG:::
   const vpHeight = 400;
@@ -22,38 +25,6 @@ module.exports = {
   // Main graph container
   const g = svg.append("g")
       .attr("class", "circles");
-
-  // // Main graph style
-  // g.append("style").text(`
-  //   .circles {
-  //     stroke: transparent;
-  //     stroke-width: 1.5px;
-  //   }
-  //   .circles circle:hover {
-  //     stroke: black;
-  //   }
-  // `);
-
-  // Main graph style
-  g.append("style").text(`
-    .circles {
-      stroke: transparent;
-      stroke-width: 1.5px;
-    }
-    .circles circle:hover {
-      stroke: black;
-    }
-    .link {
-      fill: none;
-      stroke: #ccc;
-      stroke-width: 2px;
-    }
-    .node circle {
-      fill: #fff;
-      stroke: steelblue;
-      stroke-width: 3px;
-    }
-  `);
 
   svg.call(d3.zoom()
       .extent([[0, 0], [width, height]])
@@ -74,11 +45,6 @@ module.exports = {
     g.attr("transform", d3.event.transform);
   }
 
-
-    // Create the cluster layout:
-    // var cluster = d3.cluster()
-    //   .size([height, width - 300]);  // 100 is the margin I will have on the right side
-
     var i = 0,
     duration = 750,
     root;
@@ -95,53 +61,6 @@ module.exports = {
     // root.children.forEach(collapse);
 
     update(root);
-
-    // // Add the links between nodes:
-    // g.selectAll('path')
-    //   .data( root.descendants().slice(1) )
-    //   .enter()
-    //   .append('path')
-    //   .attr("d", function(d) {
-    //       return "M" + d.y + "," + d.x
-    //               + "C" + (d.parent.y + 50) + "," + d.x
-    //               + " " + (d.parent.y + 150) + "," + d.parent.x // 50 and 150 are coordinates of inflexion, play with it to change links shape
-    //               + " " + d.parent.y + "," + d.parent.x;
-    //             })
-    //   .style("fill", 'none')
-    //   .attr("stroke", '#ccc')
-
-    // // Add a circle for each node:
-    // const node = g.selectAll("g")
-    //   .data(root.descendants())
-    //   .enter()
-    //   .append("g")
-    //   .attr("transform", function(d) {
-    //       return "translate(" + d.y + "," + d.x + ")"
-    //   })
-    //   .append("circle")
-    //     .attr("r", radius)
-    //     .style("fill", "green");
-
-    // // Add labels to the leaves:
-    // node.filter(function(d) {
-    //     return d.data.index > -1
-    //   }).append("text")
-    //     .attr("dx", function(d) { return d.children ? 8 : 60; })
-    //     .attr("dy", function(d) { return d.children ? 20 : 4; })
-    //     .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-    //     .text(function(d) { return d.children ? "node" + d.height : "" + labels[d.data.index]; });
-
-    // // Add icon images:
-    // node.filter(function(d) {
-    //     return d.data.index > -1
-    //   }).append("svg:image")
-    //     .attr('x', 15)
-    //     .attr('y', -12)
-    //     .attr('width', 30)
-    //     .attr('height', 30)
-    //     .attr("xlink:href", function(d) {
-    //       return path.join(rootDir, labels[d.data.index]);
-    //     })
 
     // Collapse the node and all its children
     function collapse(d) {
@@ -175,7 +94,6 @@ module.exports = {
           .attr("transform", function(d) {
             return "translate(" + source.y0 + "," + source.x0 + ")";
         })
-        .on('click', click);
 
       // Add node inspection functionality
       nodeEnter.on('dblclick', nodeInspectionModal);
@@ -184,9 +102,6 @@ module.exports = {
       nodeEnter.append('circle')
           .attr('class', 'node')
           .attr('r', radius)
-          .style("fill", function(d) {
-              return d._children ? "lightsteelblue" : "#e0e0e0";
-          });
 
       // Add labels for the nodes
       nodeEnter.append('text')
@@ -202,6 +117,8 @@ module.exports = {
       // Add icon images to leaf nodes
       nodeEnter.filter(function(d) {
             return d.data.index > -1
+        }).on('click', function(d) {
+          props.updatePropertiesPanel(d, rootDir, descriptors);
         }).append("svg:image")
             .attr('x', 15)
             .attr('y', -10)
@@ -212,8 +129,12 @@ module.exports = {
               return path.join(rootDir, labels[d.data.index]);
           });
 
-      // Update image hover
-      preview.imagePreview(labels);
+      // Handler for intermediate notes
+      nodeEnter.filter(function(d) {
+        return d.data.index == -1
+      }).on('click', function(d) {
+        props.updatePropertiesPanel(d, rootDir, descriptors);
+      });
 
       // UPDATE
       var nodeUpdate = nodeEnter.merge(node);
@@ -228,9 +149,6 @@ module.exports = {
       // Update the node attributes and style
       nodeUpdate.select('circle.node')
         .attr('r', radius)
-        .style("fill", function(d) {
-            return d._children ? "lightsteelblue" : "#fff";
-        })
         .attr('cursor', 'pointer')
         .on("mouseover", function(d,i) {
           d3.select(this).transition()
@@ -314,7 +232,7 @@ module.exports = {
       }
 
       // Toggle children on click.
-      function click(d) {
+      function toggleChildren(d) {
         if (d.children) {
             d._children = d.children;
             d.children = null;
@@ -397,14 +315,6 @@ module.exports = {
                   }
               }
           }
-      }
-
-      // Handle partitioning
-      const partitionInput = document.getElementById("partitionThreshold");
-      const partitionButton = document.getElementById("partitionButton");
-
-      partitionButton.onclick = function() {
-          console.log("TODO DIE PARTITIONING");
       }
     }
   }

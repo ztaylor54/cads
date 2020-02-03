@@ -9,7 +9,10 @@ global.shared = {
   featureRadius: 0,
   featureRadiusImage: undefined,
   blurRadius: 0,
-  blurRadiusImage: undefined
+  blurRadiusImage: undefined,
+  featureInspectImage: undefined,
+  tempFileLoc: undefined,
+  tags: new Array()
  };
 
 function createWindow () {

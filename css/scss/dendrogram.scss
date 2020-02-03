@@ -1,0 +1,28 @@
+// Configure the styling of the dendrogram
+
+@import 'vars';
+
+.dendrogram {
+  svg {
+    g {
+      .circles {
+        stroke: transparent;
+        stroke-width: 1.5px;
+      }
+      .circles circle:hover {
+        stroke: $accent1;
+      }
+      .link {
+        fill: none;
+        stroke: $contrast1;
+        stroke-width: 2px;
+      }
+      .node circle {
+        //fill-opacity: 0.0;
+        fill: $background;
+        stroke: $contrast2;
+        stroke-width: 3px;
+      }
+    }
+  }
+}

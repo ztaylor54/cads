@@ -21,21 +21,25 @@ module.exports = {
 			// you might want to adjust to get the right result
 
 		/* END CONFIG */
-		$("image.preview").hover(function(e){
-			$("body").append("<p id='preview'><img src='"+ e.target.href.baseVal +"' alt='Image preview' /></p>");
-			$("#preview")
-				.css("top",(e.pageY - xOffset) + "px")
-				.css("left",(e.pageX + yOffset) + "px")
-				.fadeIn("fast");
-	    },
-		function(){
-			this.title = this.t;
-			$("#preview").remove();
-	    });
-		$("image.preview").mousemove(function(e){
-			$("#preview")
-				.css("top",(e.pageY - xOffset) + "px")
-				.css("left",(e.pageX + yOffset) + "px");
-		});
+		 $("image.preview").hover(function(e) {
+			 const card = document.querySelector('.props-card-img').style["background-image"] = e.target.href.baseVal;
+
+		 });
+		//.hover(function(e){
+		// 	$("body").append("<p id='preview'><img src='"+ e.target.href.baseVal +"' alt='Image preview' /></p>");
+		// 	$("#preview")
+		// 		.css("top",(e.pageY - xOffset) + "px")
+		// 		.css("left",(e.pageX + yOffset) + "px")
+		// 		.fadeIn("fast");
+	  //   },
+		// function(){
+		// 	this.title = this.t;
+		// 	$("#preview").remove();
+	  //   });
+		// $("image.preview").mousemove(function(e){
+		// 	$("#preview")
+		// 		.css("top",(e.pageY - xOffset) + "px")
+		// 		.css("left",(e.pageX + yOffset) + "px");
+		// });
 	}
 };

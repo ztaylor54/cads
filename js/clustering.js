@@ -4,13 +4,18 @@ const fs = require('fs');
 const path = require('path');
 const { agnes } = require('ml-hclust');
 const dendrogram = require('../js/modules/dendrogram.js');
-const remote = require('electron').remote;
+const modal = require('../js/modules/modal.js');
+// const remote = require('electron').remote;
+const tmp = require('tmp');
+const mdc = require('material-components-web');
+const Tokenfield = require('tokenfield');
 
 // Root dir for input images
 var rootDir;
 var descriptors = new Array();
+var tags = new Array();
 
-let globalTree;
+let globalTree = {};
 
 /* Entry point to clustering process, called when directory is selected */
 function loadDir(dirInput) {
@@ -23,6 +28,24 @@ function loadDir(dirInput) {
 
   // Prompt the user to define the feature radius for this image set
   userDefineFeatureRadius();
+}
+
+/* Load a clustering from a file */
+function loadFromFile(fileInput) {
+  try {
+    // Validate the json
+    load(fileInput.files[0].path);
+  } catch (e) {
+    // Notify the user of a failed load
+    var MDCSnackbar = mdc.snackbar.MDCSnackbar;
+    var snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+    const snackbar_label = document.querySelector('.mdc-snackbar__label');
+    snackbar_label.innerHTML = "Unable to load file: not a valid CADS data file.";
+
+    console.log(e);
+
+    snackbar.open();
+  }
 }
 
 /* Called after userDefineFeatureRadius modal is closed */
@@ -45,8 +68,10 @@ function extractFeatures() {
 
     files.forEach(function (file, index) {
       // Add the descriptors to the global array (filename, descriptors)
-      const desc = preProcess(file);
-      descriptors.push({'filename': file, 'descriptors': desc});
+      const cvMats = preProcess(file);
+      const desc = cvMats.descriptors;
+      const kps = cvMats.keypoints;
+      descriptors.push({'filename': file, 'descriptors': desc, 'keypoints': kps});
       console.log(index);
       // updateProgBar(index, files.length);
     });
@@ -68,7 +93,7 @@ function userDefineFeatureRadius() {
   console.log(path.join(rootDir, fs.readdirSync(rootDir)[0]));
   remote.getGlobal('shared').featureRadiusImage = path.join(rootDir, fs.readdirSync(rootDir)[0]);
 
-  launchModal(url, userDefineBlurRadius);
+  modal.launchModal(url, 1000, 600, userDefineBlurRadius);
 }
 
 /* Prompts the user to define the ksize for the median blur */
@@ -80,35 +105,7 @@ function userDefineBlurRadius() {
   remote.getGlobal('shared').blurRadiusImage = path.join(rootDir, fs.readdirSync(rootDir)[0]);
 
   // Continue with feature extraction afterwards
-  launchModal(url, extractFeatures);
-}
-
-/* Opens a modal window for user interaction. callback(cbParams) is called upon closing the window. */
-function launchModal(url, callback) {
-  // Open a new window to do this
-  let win = new remote.BrowserWindow({
-    width: 1200,
-    height: 800,
-    parent: remote.getCurrentWindow(),
-    // modal: true,
-    webPreferences: {
-            nodeIntegration: true
-        },
-  });
-  win.setMenu(null);
-  win.on('closed', () => {
-    win = null;
-
-    // Continue
-    callback();
-  });
-  win.webContents.on('did-finish-load', ()=>{
-   win.show();
-   win.focus();
-  });
-
-  // win.webContents.openDevTools();
-  win.loadURL(url);
+  modal.launchModal(url, 1000, 600, extractFeatures);
 }
 
 /* Extracts features from an image and returns the descriptors */
@@ -154,7 +151,10 @@ function preProcess(file) {
   */
 
   // Return the descriptors
-  return detector.compute(src, keyPoints);
+  return {
+    descriptors: detector.compute(src, keyPoints),
+    keypoints: keyPoints
+  };
 }
 
 /* Perform hierarchical clustering and draw resulting dendrogram */
@@ -176,9 +176,11 @@ function cluster() {
 
   globalTree = tree;
   annotate(globalTree);
+  // Serialize the OpenCV work to global state
+  save();
 
   // Draw the dendrogram
-  dendrogram.drawDendrogram("#dendrogram", tree, descriptors.map(x => x.filename), rootDir);
+  dendrogram.drawDendrogram("#dendrogram", globalTree, descriptors, rootDir);
 
   // Stop timing
   var millis = Date.now() - start;
@@ -295,3 +297,147 @@ function radiusChanged(newVal) {
   // Set this value globally
   remote.getGlobal('shared').featureRadius = newVal;
 }
+
+/* UI ACTIONS THAT INTERACT WITH OPENCV OR CLUSTERING DATA STRUCTURE
+ *
+ * These need to be included here because the main app.js
+ * cannot use opencv with the current webpack configuration.
+ *
+ */
+
+// Launch modals on nav action
+const navNewEl = document.querySelector('.nav-action-new');
+navNewEl.addEventListener('click', (event) => {
+  // Create an input element to get dir input from user
+  var input = document.createElement('input');
+  input.setAttribute("type", "file");
+  input.setAttribute("id", "dirInput");
+  input.setAttribute("accept", "image/*");
+  input.setAttribute("onchange", "loadDir(this)");
+  input.webkitdirectory = true;
+  input.mozdirectory = true;
+  input.click();
+  return false;
+});
+
+const navLoadEl = document.querySelector('.nav-action-open');
+navLoadEl.addEventListener('click', (event) => {
+  // Create an input element to get json input from user
+  var input = document.createElement('input');
+  input.setAttribute("type", "file");
+  input.setAttribute("accept", ".json");
+  input.setAttribute("onchange", "loadFromFile(this)");
+  input.click();
+  return false;
+
+});
+
+// Handle tags to dies
+const tf = new Tokenfield({
+  el: document.querySelector('.props-tags-input'), // Attach Tokenfield to the input element with class "text-input"
+  items: [
+    // Autocomplete items go here
+  ],
+  setItems: [
+    // Pre-set items go here
+  ],
+  newItems: true,
+  placeholder: "Enter a tag..."
+});
+
+/* Serialize the OpenCV state to the global scope */
+function save() {
+  var pjson = require('../package.json');
+
+  var saveFile = {
+    meta: {
+      version: pjson.version
+    },
+    rootDir: rootDir,
+    clustering: globalTree,
+    tags: remote.getGlobal('shared').tags,
+    descriptors: []
+  };
+
+  // Encode the descriptors and add them to the save file
+  descriptors.forEach(desc => {
+    const descOutBase64 = cv.imencode('.jpg', desc.descriptors).toString('base64'); // Perform base64 encoding
+    saveFile.descriptors.push({
+      filename: desc.filename,
+      descriptors: descOutBase64,
+      keypoints: desc.keypoints
+    })
+  });
+
+  // Write to temp file
+  tmp.file(function _tempFileCreated(err, path, fd, cleanupCallback) {
+    if (err) throw err;
+
+    console.log('File: ', path);
+    console.log('Filedescriptor: ', fd);
+
+    fs.writeFile(path, JSON.stringify(saveFile), 'utf8', function(err) {
+      if(err) {
+        return console.log(err);
+      }
+        console.log("Saved temp file!");
+
+        remote.getGlobal('shared').tempFileLoc = path;
+    });
+  });
+}
+
+/* Load from serialized state */
+function load(saveFile) {
+  // Read the file, then parse the fields
+  const data = fs.readFileSync(saveFile, 'utf8');
+
+  // Will throw error to parent if not valid JSON
+  const parsedJSON = JSON.parse(data);
+
+  if (!parsedJSON.rootDir) {
+    throw new Error("No root directory specified in save file, aborting load");
+  }
+
+  if (!parsedJSON.clustering) {
+    throw new Error("No clustering data specified in save file, aborting load");
+  }
+
+  if(!parsedJSON.descriptors) {
+    throw new Error("No descriptor data specified in save file, aborting load");
+  }
+
+  if(!parsedJSON.tags) {
+    throw new Error("No tags data specified in save file, aborting load");
+  }
+
+  // Copy the tags over
+  this.tags = new Array();
+  var self = this;
+  parsedJSON.tags.forEach(tag => {
+    self.tags.push(tag);
+  });
+
+  remote.getGlobal('shared').tags = this.tags;
+
+  const descr = new Array();
+
+  parsedJSON.descriptors.forEach(desc => {
+    // Convert to OpenCV mat
+    const descBuffer = Buffer.from(desc.descriptors,'base64');
+    const kpsBuffer = Buffer.from(desc.keypoints, 'base64');
+    const descMat = cv.imdecode(descBuffer);
+    const kpsMat = cv.imdecode(kpsBuffer);
+
+    descr.push({
+      filename: desc.filename,
+      descriptors: descMat,
+      keypoints: kpsMat
+    });
+
+  });
+
+  // Draw the dendrogram
+  dendrogram.drawDendrogram("#dendrogram", parsedJSON.clustering, descr, parsedJSON.rootDir);
+}
+const remote = require('electron').remote;
