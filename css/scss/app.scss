@@ -113,14 +113,10 @@ hr {
 
   max-height: 100%;
 
-  .props-card-content {
-
-  }
-
   .props-grid-container {
     display: grid;
-    grid-template-columns: repeat(5, 20%);
-    grid-template-rows: 1fr 2fr 2fr;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr 1fr 2fr 2fr;
     // grid-gap: 16px;
     max-width: $props-width;
     width: 100%;
@@ -140,6 +136,78 @@ hr {
     max-height: 100%;
   }
 
+  .props-height-label {
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1;
+    padding: 16px;
+
+    align-self: center;
+  }
+
+  .props-card-height {
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 1;
+    padding: 16px;
+  }
+
+  .props-depth-label {
+    grid-column: 3 / span 1;
+    grid-row: 2 / span 1;
+    padding: 16px;
+
+    align-self: center;
+  }
+
+  .props-card-depth {
+    grid-column: 4 / span 1;
+    grid-row: 2 / span 1;
+    padding: 16px;
+  }
+
+  .props-score-label {
+    grid-column: 3 / span 1; 
+    grid-row: 1 / span 1; 
+    padding: 16px;
+
+    align-self: center;
+  }
+
+  .props-card-score {
+    grid-column: 4 / span 1; 
+    grid-row: 1 / span 1;
+    padding: 16px;
+  }
+
+  .props-die-label-intermediate {
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 1;
+    padding: 16px;
+
+    align-self: center;
+  }
+
+  .props-card-die-intermediate {
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 1;
+    padding: 16px;
+  }
+
+  .props-card-die-leaf {
+    grid-column: 2 / span 4;
+    grid-row: 2 / span 1;
+
+    align-self: center;
+    padding: 16px;
+  }
+
+  .props-die-label-leaf {
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1;
+    
+    align-self: center;
+    padding: 16px;
+  }
+
   .props-filename-label {
     grid-column: 1 / span 1;
     grid-row: 1 / span 1;
@@ -148,15 +216,15 @@ hr {
     align-self: center;
   }
 
-  .props-tags-label {
+  .props-tags-label-leaf {
     grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 3 / span 1;
     padding: 16px;
 
     align-self: center;
   }
 
-  .props-actions-label {
+  .props-tags-label-intermediate {
     grid-column: 1 / span 1;
     grid-row: 3 / span 1;
     padding: 16px;
@@ -165,15 +233,20 @@ hr {
   }
 
   .props-buttons {
-    grid-column: 1 / span 5;
-    grid-row: 3 / span 1;
+    grid-column: 1 / span 6;
+    grid-row: 4 / span 1;
     padding: 16px;
   }
 
   .props-tags-wrapper {
-    grid-column: 2 / span 4;
-    grid-row: 2 / span 1;
+    grid-column: 2 / span 5;
+    grid-row: 3 / span 1;
+  }
 
+
+  .props-tags-wrapper-intermediate {
+    grid-column: 2 / span 5;
+    grid-row: 3 / span 1;
   }
 
   .tokenfield {
@@ -184,6 +257,10 @@ hr {
     margin: 16px;
     width: auto;
     height: 60%;
+  }
+
+  .props-card-inactive {
+    display: none;
   }
 }
 

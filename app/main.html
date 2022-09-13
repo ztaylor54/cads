@@ -82,16 +82,6 @@
                 </span>
                 <span class="mdc-tab__ripple"></span>
               </button>
-              <button class="mdc-tab mdc-tab--min-width" role="tab" aria-selected="true" tabindex="1">
-                <span class="mdc-tab__content">
-                  <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
-                  <span class="mdc-tab__text-label">Cards</span>
-                </span>
-                <span class="mdc-tab-indicator">
-                  <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                </span>
-                <span class="mdc-tab__ripple"></span>
-              </button>
               <button class="mdc-tab mdc-tab--min-width" role="tab" aria-selected="true" tabindex="2">
                 <span class="mdc-tab__content">
                   <!-- <span class="mdc-tab__icon material-icons" aria-hidden="true">favorite</span> -->
@@ -108,23 +98,37 @@
       </div>
       <!-- Props cards go here -->
       <div class="mdc-card props-card">
-        <div class="props-card-img mdc-card__media mdc-card__media--square">
+        <div class="props-card-img mdc-card__media mdc-card__media--square leaf">
         </div>
         <div class="props-card-content props-grid-container">
-          <span class="props-filename-label">File</span>
-          <span class="props-card-filename"></span><br>
-          <span class="props-tags-label">Tags</span>
-          <div class="props-tags-wrapper">
+          <!-- Info for leaf nodes -->
+          <span class="props-filename-label leaf">File</span>
+          <span class="props-card-filename leaf"></span>
+
+          <!-- Info for intermediate nodes -->
+          <span class="props-height-label intermediate props-card-inactive">Height:</span>
+          <span class="props-card-height intermediate props-card-inactive"></span>
+          <span class="props-depth-label intermediate props-card-inactive">Depth:</span>
+          <span class="props-card-depth intermediate props-card-inactive"></span>
+          <span class="props-score-label intermediate props-card-inactive">Score:</span>
+          <span class="props-card-score intermediate props-card-inactive"></span>
+          
+          <!-- Die Label -->
+          <span class="props-die-label props-die-label-leaf">Die:</span>
+          <span class="props-card-die props-card-die-leaf"></span>
+
+          <!-- TODO: Add 'Die' label -->
+
+          <span class="props-tags-label props-tags-label-leaf">Tags</span>
+          <div class="props-tags props-tags-wrapper">
             <input class="props-tags-input">
           </div>
-          <!-- <span class="props-actions-label">Actions</span> -->
           <div class="mdc-card__action-buttons props-buttons">
-            <button class="mdc-button mdc-card__action mdc-card__action--button props-inspect-features">  <span class="mdc-button__ripple"></span> Inspect Features</button>
-            <button class="mdc-button mdc-card__action mdc-card__action--button props-add-note">  <span class="mdc-button__ripple"></span> Add Note</button>
+            <button class="mdc-button mdc-card__action mdc-card__action--button props-inspect-features leaf">  <span class="mdc-button__ripple"></span> Inspect Features</button>
+            <button class="mdc-button mdc-card__action mdc-card__action--button props-add-note leaf">  <span class="mdc-button__ripple"></span> Add Note</button>
+            <button class="mdc-button mdc-card__action mdc-card__action--button props-view-cards intermediate props-card-inactive">  <span class="mdc-button__ripple"></span> Card View</button>
+            <button class="mdc-button mdc-card__action mdc-card__action--button props-collapse-node intermediate props-card-inactive">  <span class="mdc-button__ripple"></span> Collapse node</button>
             <button class="mdc-button mdc-card__action mdc-card__action--button props-make-die">  <span class="mdc-button__ripple"></span> Make Die</button>
-            <!-- <button class="mdc-icon-button material-icons" title="Inspect Features">search</button> -->
-            <!-- <button class="mdc-icon-button material-icons" title="Add Note">note_add</button> -->
-            <!-- <button class="mdc-icon-button material-icons" title="Make Die">add</button> -->
           </div>
         </div>
       </div>

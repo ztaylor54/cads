@@ -22,6 +22,7 @@ function loadDir(dirInput) {
   // Make sure descriptors and tree are empty
   globalTree = undefined;
   descriptors = new Array();
+  tags = new Array();
 
   const root = dirInput.files[0].path;
   rootDir = root;
@@ -80,9 +81,80 @@ function extractFeatures() {
     var millis = Date.now() - start;
     console.log("Seconds elapsed = " + Math.floor(millis/1000));
 
+    //makeImages();
+
     // Display the graph
     cluster();
   });
+}
+
+function makeImages() {
+  const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
+    // detect keypoints
+    const keyPoints1 = detector.detect(img1);
+    const keyPoints2 = detector.detect(img2);
+  
+    // compute feature descriptors
+    const descriptors1 = detector.compute(img1, keyPoints1);
+    const descriptors2 = detector.compute(img2, keyPoints2);
+  
+    // match the feature descriptors
+    const matches = matchFunc(descriptors1, descriptors2);
+  
+    // Ignore keypoints outside user-defined radius
+    const center1 = new cv.Point(img1.rows/2, img1.cols/2);
+    const center2 = new cv.Point(img2.rows/2, img2.cols/2);
+    var radius = 100;
+  
+    // Iterate through all keypoints & omit if distance from center is too great
+    const filteredKeyPoints1 = keyPoints1.filter(kp => {
+      // Is this keypoint within the user-defined feature radius?
+      return center1.sub(kp.pt).norm() <= radius
+    });
+  
+    const filteredKeyPoints2 = keyPoints2.filter(kp => {
+      // Is this keypoint within the user-defined feature radius?
+      return center2.sub(kp.pt).norm() <= radius
+    });
+  
+    // only keep good matches
+    const bestN = 40;
+    const bestMatches = matches.sort(
+      (match1, match2) => match1.distance - match2.distance
+    ).slice(0, bestN);
+
+    const dist = Math.abs(
+      bestMatches.reduceRight(
+        (acc, curr) => acc + Math.abs(curr.distance),
+        0
+      ) / bestMatches.length
+    );
+
+    console.log(dist);
+
+  
+    return cv.drawMatches(
+      img1,
+      img2,
+      keyPoints1,
+      keyPoints2,
+      bestMatches
+    );
+  };
+  
+  // const img1 = cv.imread('../cads/resources/images for thesis/0081_D44.jpg');
+  // const img2 = cv.imread('../cads/resources/images for thesis/0082_D44.jpg');
+  // const img2 = cv.imread('../cads/resources/vset 3/0112_D55.jpg');
+  const img1 = cv.imread('../cads/resources/vset 3/0094_D52.jpg');
+  const img2 = cv.imread('../cads/resources/vset 3/0098_D51.jpg');
+  
+  const orbMatchesImg = matchFeatures({
+    img1,
+    img2,
+    detector: new cv.ORBDetector(),
+    matchFunc: cv.matchBruteForceHamming
+  });
+  cv.imshowWait('ORB matches', orbMatchesImg);
 }
 
 /* Prompts the user to define the feature radius */
@@ -200,6 +272,16 @@ function distance(objA, objB) {
   const bestMatches = matches.sort(
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
+
+  // // Debug to show the feature matches
+  // const matchesMat = cv.drawMatches(
+  //   objA.img,
+  //   objB.img,
+  //   objA.keypoints,
+  //   objB.keypoints,
+  //   bestMatches
+  // )
+  // cv.imshowWait('ORB matches', matchesMat);
 
   // Return the average distance between matched descriptors
   let dist = Math.abs(

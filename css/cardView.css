@@ -1,0 +1,91 @@
+html, button, input, select, textarea, span {
+  font-family: 'Roboto', sans-serif;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 5% 95%;
+  grid-template-rows: 350px 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 16px;
+  width: 100%;
+}
+
+.canvas {
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 1;
+
+  max-height: 350px;
+
+  margin: 16px;
+}
+
+.img-slider {
+  grid-column: 1 / span 2;
+  grid-row: 2 / span 1;
+}
+
+.file-label {
+  grid-column: 1 / span 1;
+  grid-row: 3 / span 1;
+}
+
+.file-content {
+  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+
+  word-wrap: break-word;
+  max-width: 300px;
+}
+
+.autoscroll-checkbox {
+  grid-column: 1 / span 1;
+  grid-row: 4 / span 1;
+}
+
+.autoscroll-checkbox-label {
+  grid-column: 2 / span 1;
+  grid-row: 4 / span 1;
+  width: fit-content;
+}
+
+.autoscroll-label {
+  grid-column: 1 / span 2;
+  grid-row: 5 / span 1;
+  width: fit-content;
+}
+
+.autoscroll-slider {
+  grid-column: 1 / span 2;
+  grid-row: 6 / span 1;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 90%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}

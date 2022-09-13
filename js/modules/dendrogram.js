@@ -71,6 +71,49 @@ module.exports = {
       }
     }
 
+    /* UI HOOKS
+     *
+     * Ideally this would be in properties.js, but that can't
+     * happen with the current design without introducing
+     * circular dependencies between dendrogram.js and properties.js.
+     */
+    document.querySelector('.props-collapse-node').addEventListener('click', (event) => {
+      toggleChildren(props.activeNode());
+    });
+    document.querySelector('.props-make-die').addEventListener('click', (event) => {
+      const nextDie = remote.getGlobal('shared').nextDie;
+      remote.getGlobal('shared').nextDie = nextDie + 1;
+
+      // Annotate the nodes
+      annotate(props.activeNode(), "D" + nextDie);
+
+      // Update the dendrogram
+      update(props.activeNode());
+    });
+
+    // Annotate a node and all its children
+    // Collapse the node and all its children
+    function annotate(root, label) {
+      root.label = label;
+
+      // Recursive call
+      if(root.children) {
+        root.children.forEach(c => annotate(c, label));
+      }
+    }
+
+    // Toggle children on click.
+    function toggleChildren(d) {
+      if (d.children) {
+          d._children = d.children;
+          d.children = null;
+        } else {
+          d.children = d._children;
+          d._children = null;
+        }
+      update(d);
+    }
+
     function update(source) {
 
       // Assigns the x and y position for the nodes
@@ -88,15 +131,12 @@ module.exports = {
       var node = g.selectAll('g.node')
           .data(nodes, function(d) {return d.id || (d.id = ++i); });
 
-      // Enter any new modes at the parent's previous position.
+      // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append('g')
           .attr('class', 'node')
           .attr("transform", function(d) {
             return "translate(" + source.y0 + "," + source.x0 + ")";
         })
-
-      // Add node inspection functionality
-      nodeEnter.on('dblclick', nodeInspectionModal);
 
       // Add Circle for the nodes
       nodeEnter.append('circle')
@@ -112,7 +152,14 @@ module.exports = {
           .attr("text-anchor", function(d) {
               return d.children || d._children ? "end" : "start";
           })
-          .text(function(d) { return d.children ? d.data.height.toFixed(2) : "" + labels[d.data.index]; });
+          .text(function(d) {
+            // If this node is a member of a die
+            var l = "";
+            if(d.label) {
+              l = "(" + d.label + ")";
+            }
+             return d.children ? d.data.height.toFixed(2) + " " + l : "" + labels[d.data.index] + " " + l;
+           });
 
       // Add icon images to leaf nodes
       nodeEnter.filter(function(d) {
@@ -229,92 +276,6 @@ module.exports = {
         `;
 
         return path;
-      }
-
-      // Toggle children on click.
-      function toggleChildren(d) {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-          } else {
-            d.children = d._children;
-            d._children = null;
-          }
-        update(d);
-      }
-
-      // Bring up node inspection modal
-      function nodeInspectionModal(d) {
-          if(d.children) {
-              // Get the modal
-              var modal = document.getElementById("nodeInspectionModal");
-
-              // Get the <span> element that closes the modal
-              var span = document.getElementsByClassName("close")[0];
-
-              // Get the checkbox for autoscroll
-              var autoscroll = document.getElementById("autoscrollCheckbox");
-
-              // Set the initial modal content
-              var imgSlider = document.getElementById("modalImageSlider");
-              var autoscrollSlider = document.getElementById("autoscrollSpeed");
-              imgSlider.max = d.data.members.length - 1;
-
-              imgSlider.oninput = function() {
-                  document.getElementById("imageId").innerHTML = labels[d.data.members[this.value]];
-                  const newImg = cv.imread(path.join(rootDir, labels[d.data.members[this.value]]));
-                  ih.renderImage(newImg, document.getElementById('modalCanvas'));
-              }
-
-              autoscrollSpeed.oninput = function() {
-                  autoscroll.oninput();
-              }
-
-              imgSlider.oninput();
-
-              // Open the modal
-              modal.style.display = "block";
-
-              var interval;
-
-              // When the user clicks on <span> (x), close the modal
-              span.onclick = function() {
-                  modal.style.display = "none";
-                  clearInterval(interval);
-                  autoscroll.checked = false;
-              }
-
-              // When the user wants to autoscroll images
-              autoscroll.oninput = function() {
-                  clearInterval(interval);
-                  if (this.checked) {
-                      interval = setInterval(function() {
-                          var value = parseInt(imgSlider.value);
-                          var max = parseInt(imgSlider.max);
-                          var min = parseInt(imgSlider.min);
-
-                          // Cycle back and forth through images
-                          if (value < max) {
-                              imgSlider.value = value + 1;
-                              imgSlider.oninput();
-                          }
-                          else if (value == max) {
-                              imgSlider.value = min;
-                              imgSlider.oninput();
-                          }
-                      }, autoscrollSlider.value);
-                  }
-              }
-
-              // When the user clicks anywhere outside of the modal, close it
-              window.onclick = function(event) {
-                  if (event.target == modal) {
-                    clearInterval(interval);
-                    autoscroll.checked = false;
-                    modal.style.display = "none";
-                  }
-              }
-          }
       }
     }
   }

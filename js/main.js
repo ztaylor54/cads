@@ -12,6 +12,7 @@ global.shared = {
   blurRadiusImage: undefined,
   featureInspectImage: undefined,
   tempFileLoc: undefined,
+  nextDie: 0,
   tags: new Array()
  };
 
