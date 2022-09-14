@@ -2,9 +2,7 @@
 
 <img src="./static/imgs/header.png" width="600">
 
-<!-- ![header image](./static/imgs/header.png "Header") -->
-
-The Computer-Aided Die Study (CADS) is a new way to conduct die studies using computer vision techniques. This project is a continuation and re-imagining of [previous efforts](https://numismatics.org/pocketchange/cads/) by the American Numismatic Society to create a computational die study program, with the added intention of producing a user-friendly tool numismatists can use for their research.
+The Computer-Aided Die Study (CADS) is a new way to conduct [die studies](https://youtu.be/VoBUVOUuvRA) using computer vision techniques. This project is a continuation and re-imagining of [previous efforts](https://numismatics.org/pocketchange/cads/) by the American Numismatic Society to create a computational die study program, with the added intention of producing a user-friendly tool numismatists can use for their research.
 
 The primary goal of CADS is to vastly reduce the time required for numismatists to conduct die studies. Die studies are traditionally conducted by hand, and are one of the most arduous tasks a numismatist can undertake. With CADS, the time required can be reduced from months-to-years to only a few hours of work.
 
