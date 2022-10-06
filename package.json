@@ -40,7 +40,7 @@
     "autoprefixer": "^9.7.4",
     "babel-loader": "^8.0.6",
     "file-saver": "^2.0.2",
-    "jimp": "^0.8.4",
+    "jimp": "^0.16.2",
     "material-components-web": "^4.0.0",
     "material-ui-chip-input": "^2.0.0-beta.2",
     "node-loader": "^0.6.0",
