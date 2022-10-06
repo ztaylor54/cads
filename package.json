@@ -16,9 +16,9 @@
   "license": "MIT",
   "devDependencies": {
     "css-loader": "^3.4.2",
-    "d3": "^5.11.0",
+    "d3": "^7.6.1",
     "d3-drag": "^1.2.4",
-    "d3-zoom": "^1.8.3",
+    "d3-zoom": "^3.0.0",
     "electron": "^6.0.1",
     "electron-rebuild": "^1.8.5",
     "extract-loader": "^3.1.0",
